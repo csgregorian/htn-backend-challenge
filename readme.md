@@ -3,7 +3,7 @@
 Start with:
 
 
-```python
+```bash
 python3 create.py # only run once, nukes DB
 export FLASK_APP=server.py && export FLASK_DEBUG=1 && flask run
 ```
