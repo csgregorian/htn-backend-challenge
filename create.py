@@ -42,7 +42,7 @@ def add_data_from_file(filename):
 
 		for user in users:
 			fields = ("name", "picture", "company", "email", "phone", "latitude", "longitude")
-			user_tuple = tuple(map(lambda x: user[x], fields))
+			user_tuple = tuple(map(lambda x: user.get(x), fields))
 
 			query = '''
 				INSERT INTO users(name, picture, company, email, phone, latitude, longitude)
@@ -52,8 +52,8 @@ def add_data_from_file(filename):
 			db.execute(query, user_tuple)
 			user_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
 		
-			for skill in user["skills"]:
-				skill_tuple = (skill["name"], skill["rating"], user_id)
+			for skill_obj in user["skills"]:
+				skill_tuple = (skill_obj["name"], skill_obj["rating"], user_id)
 				query = '''
 					INSERT INTO skills(name, rating, user_id)
 					VALUES (?, ?, ?)
@@ -64,9 +64,9 @@ def add_data_from_file(filename):
 		db.commit()
 
 
-
-with sqlite3.connect("htn.db") as db:
-	create_users_table(db)
-	create_skills_table(db)
-	add_data_from_file("users.json")
+if __name__ == "__main__":
+	with sqlite3.connect("htn.db") as db:
+		create_users_table(db)
+		create_skills_table(db)
+		add_data_from_file("users.json")
 
